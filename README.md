@@ -1,6 +1,6 @@
 # aws-ecommerce-lab
 Automated deployment of a High Availability e-commerce architecture on AWS. Integrates EC2, RDS, EFS, and custom UI within WooCommerce.
-# AWS High Availability E-Commerce Architecture ☁️🛒
+# AWS High Availability E-Commerce Architecture 
 
 This repository contains the source files and documentation for deploying a fault-tolerant, scalable, and highly available e-commerce infrastructure on Amazon Web Services (AWS). The project integrates a custom frontend UI with a WordPress + WooCommerce backend.
 
