@@ -102,72 +102,59 @@ Architektura została pomyślnie przetestowana pod kątem odporności na awarie:
 
 ## 📸 Zrzuty ekranu
 
-### 1. Kreator instalacji WordPress
-![WordPress Install]
-<img width="1920" height="896" alt="image" src="https://github.com/user-attachments/assets/28d6c2c4-5999-4f1f-ae90-435b0a0be6e2" />
-
-
-Formularz konfiguracji WordPress dostępny przez DNS Application Load Balancera. Widać wypełnione pola: tytuł witryny (*Cloud Store*), nazwa użytkownika (*admin*) oraz silne hasło wygenerowane automatycznie. Instalacja uruchamiana jest bezpośrednio przez publiczny adres ALB — dowód, że infrastruktura CloudFormation działa poprawnie.
-
----
-
-### 2. CloudFormation — oś czasu wdrożenia (`CREATE_COMPLETE`)
+### 1. CloudFormation — oś czasu wdrożenia (CREATE_COMPLETE)
 ![CloudFormation Timeline]
-<img width="1920" height="862" alt="image" src="https://github.com/user-attachments/assets/8669f771-afe3-49d9-9469-77b19f5301ae" />
+<img width="1920" height="896" alt="photo_5190926538449295594_w (1)" src="https://github.com/user-attachments/assets/fd375c72-ff84-4759-a819-08cd14373c9a" />
 
+Widok konsoli AWS CloudFormation ze statusem **CREATE_COMPLETE** dla stacku Lab2-Ecommerce. Oś czasu (Timeline view) pokazuje równoległe provisjonowanie wszystkich zasobów: ALBListener, ScalingPolicy, AutoScalingGroup, DBInstance (RDS — najdłuższy zasób), MountTargetA/B (EFS) oraz LaunchTemplate. Całe środowisko zostało wdrożone automatycznie z jednego szablonu YAML.
 
-Widok konsoli AWS CloudFormation ze statusem **CREATE_COMPLETE** dla stacku `Lab2-Ecommerce`. Oś czasu (`Timeline view`) pokazuje równoległe provisjonowanie wszystkich zasobów: ALBListener, ScalingPolicy, AutoScalingGroup, DBInstance (RDS — najdłuższy zasób), MountTargetA/B (EFS) oraz LaunchTemplate. Całe środowisko zostało wdrożone automatycznie z jednego szablonu YAML.
-
----
-
-### 3. Konfiguracja serwera przez AWS Session Manager
+### 2. Konfiguracja serwera przez AWS Session Manager
 ![Session Manager]
-<img width="1446" height="982" alt="image" src="https://github.com/user-attachments/assets/f93b6db5-6516-4c89-8f75-f18d22bfa520" />
+<img width="1920" height="862" alt="photo_5190926538449295607_w (1)" src="https://github.com/user-attachments/assets/51ac824f-2bda-48ef-ba7a-fe1621724ab6" />
 
+Terminal AWS Systems Manager Session Manager połączony z instancją EC2 (i-02d0a1ffdde894fdd). Widoczna konfiguracja Apache (mod_rewrite) dla WordPress — tworzenie reguł przepisywania URL w pliku `.htaccess` oraz restart serwera HTTP. Całość bez potrzeby otwierania portów SSH ani zarządzania kluczami.
 
-Terminal AWS Systems Manager Session Manager połączony z instancją EC2 (`i-02d0a1ffdde894fdd`). Widoczna konfiguracja Apache (`mod_rewrite`) dla WordPress — tworzenie reguł przepisywania URL w pliku `.htaccess` oraz restart serwera HTTP. Całość bez potrzeby otwierania portów SSH ani zarządzania kluczami.
+### 3. Instalacja WordPress przez adres ALB
+![WordPress Install Step 1]
+<img width="1446" height="982" alt="photo_5190926538449295807_w (1)" src="https://github.com/user-attachments/assets/4cd679bd-9ba2-4d20-9e21-bedd5368ac1e" />
 
----
+Standardowy kreator instalacji WordPress dostępny przez publiczny DNS Application Load Balancera (lab2-e-appli-...us-east-1.elb.amazonaws.com). Potwierdza, że ALB poprawnie kieruje ruch HTTP do instancji EC2 już na etapie pierwszego uruchomienia.
 
-### 4. Instalacja WordPress przez adres ALB
-![WordPress Setup via ALB](screenshots/04-wordpress-alb-setup.jpg)
+### 4. Kreator instalacji WordPress (Formularz konfiguracji)
+![WordPress Config]
+<img width="901" height="768" alt="photo_5190685616553792688_y (1)" src="https://github.com/user-attachments/assets/5d07864f-beb8-4000-b90b-fb0809336f19" />
 
-Standardowy kreator instalacji WordPress dostępny przez publiczny DNS Application Load Balancera (`lab2-e-appli-...us-east-1.elb.amazonaws.com`). Potwierdza, że ALB poprawnie kieruje ruch HTTP do instancji EC2 już na etapie pierwszego uruchomienia.
-
----
+Formularz konfiguracji WordPress dostępny przez DNS Application Load Balancera. Widać wypełnione pola: tytuł witryny (Cloud Store), nazwa użytkownika (admin) oraz silne hasło wygenerowane automatycznie. Instalacja uruchamiana jest bezpośrednio przez publiczny adres ALB — dowód, że infrastruktura CloudFormation działa poprawnie.
 
 ### 5. Panel administracyjny WordPress
-![WordPress Dashboard](screenshots/05-wordpress-dashboard.jpg)
+![WordPress Dashboard]
+<img width="1920" height="878" alt="photo_5190926538449295813_w (1)" src="https://github.com/user-attachments/assets/197ede66-e6cf-4b4a-8292-4b75532608ef" />
 
-Strona główna panelu administracyjnego WordPress po pomyślnej instalacji. Widoczna wersja **6.9.4** i nazwa witryny *Cloud Store* w pasku nawigacji. Od tego miejsca instaluje się WooCommerce i konfiguruje cały sklep.
-
----
+Strona główna panelu administracyjnego WordPress po pomyślnej instalacji. Widoczna wersja 6.9.4 i nazwa witryny Cloud Store w pasku nawigacji. Od tego miejsca instaluje się WooCommerce i konfiguruje cały sklep.
 
 ### 6. Instalacja wtyczki WooCommerce
-![WooCommerce Install](screenshots/06-woocommerce-install.jpg)
+![WooCommerce Plugin]
+<img width="1908" height="872" alt="photo_5190926538449295827_w (1)" src="https://github.com/user-attachments/assets/5386a7a3-dbad-4641-ae4b-5228952d91da" />
 
-Widok panelu wtyczek WordPress z wynikiem wyszukiwania dla *WooCommerce* — ponad **7 milionów aktywnych instalacji**, kompatybilność z bieżącą wersją WordPress potwierdzona. Przycisk *Install Now* uruchamia instalację bezpośrednio z repozytorium WordPress.
-
----
+Widok panelu wtyczek WordPress z wynikiem wyszukiwania dla WooCommerce — ponad 7 milionów aktywnych instalacji, kompatybilność z bieżącą wersją WordPress potwierdzona. Przycisk Install Now uruchamia instalację bezpośrednio z repozytorium WordPress.
 
 ### 7. Błąd 504 Gateway Time-out podczas instalacji WooCommerce
-![504 Error](screenshots/07-504-gateway-timeout.jpg)
+![504 Error]
+<img width="1703" height="716" alt="photo_5190926538449295867_w (1)" src="https://github.com/user-attachments/assets/b4c307ce-cc5d-4fe1-8f64-e7d99b00461a" />
 
-Rzeczywisty błąd napotkany podczas projektu: **504 Gateway Time-out** przy próbie instalacji WooCommerce. ALB kierował żądania do różnych instancji EC2 (pobranie na Serwer A, rozpakowanie na Serwer B), a zapis archiwum na wolumen EFS przekraczał domyślny limit czasu 60 sekund. Rozwiązanie: tymczasowe skalowanie do jednej instancji.
-
----
+Rzeczywisty błąd napotkany podczas projektu: 504 Gateway Time-out przy próbie instalacji WooCommerce. ALB kierował żądania do różnych instancji EC2 (pobranie na Serwer A, rozpakowanie na Serwer B), a zapis archiwum na wolumen EFS przekraczał domyślny limit czasu 60 sekund. Rozwiązanie: tymczasowe skalowanie do jednej instancji.
 
 ### 8. WordPress Block Editor — publikacja strony Cloud Store
-![Block Editor](screenshots/08-block-editor-publish.jpg)
+![Block Editor]
+<img width="1920" height="868" alt="photo_5190926538449295882_w (1)" src="https://github.com/user-attachments/assets/7e8e98f8-212b-40b1-8cd2-305460435de1" />
 
-Edytor blokowy WordPress z opublikowaną stroną *Cloud Store*. W lewym panelu widoczne wyszukiwanie bloku **Custom HTML** — tu wklejono kod z pliku `cloud-store-template.html`. Po prawej stronie potwierdzenie publikacji z adresem strony przez ALB. W podglądzie widoczny niestandardowy footer sklepu z kategoriami produktów.
-
----
+Edytor blokowy WordPress z opublikowaną stroną Cloud Store. W lewym panelu widoczne wyszukiwanie bloku Custom HTML — tu wklejono kod z pliku `cloud-store-template.html`. Po prawej stronie potwierdzenie publikacji z adresem strony przez ALB. W podglądzie widoczny niestandardowy footer sklepu z kategoriami produktów.
 
 ### 9. Gotowy sklep Cloud Store — strona główna
-![Cloud Store Frontend](screenshots/09-cloud-store-live.jpg)
+![Final Shop]
+<img width="1920" height="968" alt="photo_5190926538449295971_w (1)" src="https://github.com/user-attachments/assets/eb2bd5d5-d089-4596-8abe-bb182d7ab203" />
 
-Finalny efekt projektu — w pełni działający sklep internetowy **Cloud Store** dostępny pod adresem ALB. Widoczny własny interfejs z nawigacją (Home, Shop, Cart, About), koszykiem oraz sekcją hero z hasłem *„Everything you need, delivered from the cloud."* Strona działa na infrastrukturze Multi-AZ z Auto Scalingiem i współdzielonym EFS.
+Finalny efekt projektu — w pełni działający sklep internetowy Cloud Store dostępny pod adresem ALB. Widoczny własny interfejs z nawigacją (Home, Shop, Cart, About), koszykiem oraz sekcją hero z hasłem „Everything you need, delivered from the cloud.” Strona działa na infrastrukturze Multi-AZ z Auto Scalingiem i współdzielonym EFS.
 
 ---
 
